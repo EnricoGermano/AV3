@@ -9,6 +9,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:seed": "ts-node prisma/seed.ts",
+    "test": "node scripts/test-api.js",
     "benchmark": "bash scripts/benchmark.sh",
     "report": "python3 scripts/generate_report.py results"
   },

@@ -1,22 +1,430 @@
 <!doctype html>
-<html>
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
-    <title>AV3 - Demo</title>
-    <style>
-      body { font-family: Arial, sans-serif; padding: 20px; }
-      .btn { padding: 8px 12px; margin: 6px; cursor: pointer; }
-      #log { margin-top: 12px; white-space: pre-wrap; background:#f5f5f5; padding:10px; border-radius:4px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aerocode - Sistema de Gestão Aeronáutica</title>
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
-    <h1>AV3 - Painel</h1>
-    <div>
-      <button class="btn" id="btn-list">Listar Aircraft</button>
-      <button class="btn" id="btn-add">Criar Aircraft</button>
-      <button class="btn" id="btn-metrics">Obter Metrics</button>
+    <div id="app">
+      <!-- Login Page -->
+      <div id="login-page" class="login-container hidden">
+        <div class="login-box">
+          <h1>Aerocode</h1>
+          <p class="login-subtitle">Sistema de Gestão da Produção Aeronáutica</p>
+          
+          <div id="login-form-container">
+            <form id="form-login" class="login-form">
+              <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="seu@email.com" required />
+              </div>
+              <div class="form-group">
+                <label for="login-senha">Senha</label>
+                <input type="password" id="login-senha" placeholder="Digite sua senha" required />
+              </div>
+              <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+              <p id="login-msg" class="message"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Register First User Page -->
+      <div id="register-first-page" class="register-container hidden">
+        <div class="register-box">
+          <h1>Bem-vindo ao Aerocode</h1>
+          <p class="register-subtitle">Cadastre o primeiro usuário do sistema</p>
+          
+          <form id="form-register-first" class="register-form">
+            <div class="form-group">
+              <label for="reg-nome">Nome Completo</label>
+              <input type="text" id="reg-nome" placeholder="Seu nome" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-email">Email</label>
+              <input type="email" id="reg-email" placeholder="seu@email.com" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-senha">Senha</label>
+              <input type="password" id="reg-senha" placeholder="Crie uma senha" required />
+            </div>
+            <div class="form-group">
+              <label for="reg-cargo">Cargo</label>
+              <select id="reg-cargo" required>
+                <option value="">Selecione...</option>
+                <option value="administrador">Administrador</option>
+                <option value="gerente">Gerente</option>
+                <option value="operador">Operador</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-full">Criar Primeira Conta</button>
+            <p id="register-msg" class="message"></p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Main App -->
+      <div id="main-app" class="hidden">
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <h1>Aerocode</h1>
+            <span class="navbar-tagline">Sistema de Gestão da Produção Aeronáutica</span>
+          </div>
+          <div class="navbar-menu">
+            <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+            <button class="nav-btn" data-page="cadastro">Cadastros</button>
+            <button class="nav-btn" data-page="listagem">Listagem</button>
+            <button class="nav-btn" data-page="relatorios">Relatórios</button>
+            <button id="btn-user-info" class="nav-btn nav-user-info" title="Usuário logado"></button>
+            <button id="btn-logout" class="nav-btn btn-danger" onclick="logout()">Sair</button>
+          </div>
+        </div>
+      </nav>
+
+      <main class="main-container">
+        <div id="dashboard" class="page active">
+          <div class="page-header">
+            <h2>Painel de Controle</h2>
+            <p>Bem-vindo ao sistema de gestão da produção aeronáutica</p>
+          </div>
+          
+          <div class="dashboard-grid">
+            <div class="dashboard-card">
+              <div class="card-content">
+                <h3>Aeronaves</h3>
+                <p class="card-number" id="count-aircraft">0</p>
+                <button class="btn btn-primary" onclick="navigateTo('listagem')">Gerenciar</button>
+              </div>
+            </div>
+
+            <div class="dashboard-card">
+              <div class="card-content">
+                <h3>Peças</h3>
+                <p class="card-number" id="count-parts">0</p>
+                <button class="btn btn-primary" onclick="navigateTo('cadastro')">Adicionar</button>
+              </div>
+            </div>
+
+            <div class="dashboard-card">
+              <div class="card-content">
+                <h3>Funcionários</h3>
+                <p class="card-number" id="count-employees">0</p>
+                <button class="btn btn-primary" onclick="navigateTo('cadastro')">Cadastrar</button>
+              </div>
+            </div>
+
+            <div class="dashboard-card">
+              <div class="card-content">
+                <h3>Etapas</h3>
+                <p class="card-number" id="count-stages">0</p>
+                <button class="btn btn-primary" onclick="navigateTo('listagem')">Ver Detalhes</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-actions">
+            <button class="btn btn-success" id="btn-refresh-dash">Atualizar Dados</button>
+          </div>
+        </div>
+
+        <div id="cadastro" class="page">
+          <div class="page-header">
+            <h2>Cadastros</h2>
+            <p>Gerencie aeronaves, peças, funcionários e etapas</p>
+          </div>
+
+          <div class="tabs-container">
+            <button class="tab-btn active" data-tab="aeronaves">Aeronaves</button>
+            <button class="tab-btn" data-tab="pecas">Peças</button>
+            <button class="tab-btn" data-tab="funcionarios">Funcionários</button>
+            <button class="tab-btn" data-tab="etapas">Etapas</button>
+          </div>
+
+          <div id="aeronaves" class="tab-content active">
+            <form id="form-aeronave" class="form-container">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="aero-codigo">Código</label>
+                  <input type="text" id="aero-codigo" placeholder="Ex: AER-001" required />
+                </div>
+                <div class="form-group">
+                  <label for="aero-modelo">Modelo</label>
+                  <input type="text" id="aero-modelo" placeholder="Ex: Boeing 737" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="aero-tipo">Tipo</label>
+                  <select id="aero-tipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="comercial">Comercial</option>
+                    <option value="militar">Militar</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="aero-capacidade">Capacidade (passageiros)</label>
+                  <input type="number" id="aero-capacidade" placeholder="Ex: 180" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group full-width">
+                  <label for="aero-alcance">Alcance (km)</label>
+                  <input type="number" id="aero-alcance" placeholder="Ex: 5000" required />
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success">Cadastrar Aeronave</button>
+              <p id="msg-aero" class="message"></p>
+            </form>
+          </div>
+
+          <div id="pecas" class="tab-content">
+            <form id="form-peca" class="form-container">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="peca-nome">Nome da Peça</label>
+                  <input type="text" id="peca-nome" placeholder="Ex: Turbina CFM56" required />
+                </div>
+                <div class="form-group">
+                  <label for="peca-tipo">Tipo</label>
+                  <select id="peca-tipo" required>
+                    <option value="">Selecione...</option>
+                    <option value="nacional">Nacional</option>
+                    <option value="importada">Importada</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="peca-fornecedor">Fornecedor</label>
+                  <input type="text" id="peca-fornecedor" placeholder="Ex: CFM International" required />
+                </div>
+                <div class="form-group">
+                  <label for="peca-status">Status</label>
+                  <select id="peca-status" required>
+                    <option value="">Selecione...</option>
+                    <option value="producao">Produção</option>
+                    <option value="transporte">Transporte</option>
+                    <option value="pronta">Pronta</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success">Cadastrar Peça</button>
+              <p id="msg-peca" class="message"></p>
+            </form>
+          </div>
+
+          <div id="funcionarios" class="tab-content">
+            <form id="form-func" class="form-container">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="func-nome">Nome Completo</label>
+                  <input type="text" id="func-nome" placeholder="Ex: João Silva" required />
+                </div>
+                <div class="form-group">
+                  <label for="func-email">Email</label>
+                  <input type="email" id="func-email" placeholder="Ex: joao@aerocode.com" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="func-telefone">Telefone</label>
+                  <input type="tel" id="func-telefone" placeholder="Ex: (11) 99999-9999" required />
+                </div>
+                <div class="form-group">
+                  <label for="func-cargo">Cargo</label>
+                  <select id="func-cargo" required>
+                    <option value="">Selecione...</option>
+                    <option value="administrador">Administrador</option>
+                    <option value="engenheiro">Engenheiro</option>
+                    <option value="operador">Operador</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group full-width">
+                  <label for="func-endereco">Endereço</label>
+                  <input type="text" id="func-endereco" placeholder="Ex: Rua Principal, 123" required />
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success">Cadastrar Funcionário</button>
+              <p id="msg-func" class="message"></p>
+            </form>
+          </div>
+
+          <!-- Formulário Etapas -->
+          <div id="etapas" class="tab-content">
+            <form id="form-etapa" class="form-container">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="etapa-nome">Nome da Etapa</label>
+                  <input type="text" id="etapa-nome" placeholder="Ex: Montagem de Fuselagem" required />
+                </div>
+                <div class="form-group">
+                  <label for="etapa-prazo">Prazo (dias)</label>
+                  <input type="number" id="etapa-prazo" placeholder="Ex: 30" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group full-width">
+                  <label for="etapa-status">Status</label>
+                  <select id="etapa-status" required>
+                    <option value="">Selecione...</option>
+                    <option value="planejamento">Planejamento</option>
+                    <option value="em_andamento">Em Andamento</option>
+                    <option value="concluida">Concluída</option>
+                    <option value="atrasada">Atrasada</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success">Cadastrar Etapa</button>
+              <p id="msg-etapa" class="message"></p>
+            </form>
+          </div>
+        </div>
+
+        <!-- Listagem Page -->
+        <div id="listagem" class="page">
+          <div class="page-header">
+            <h2>Listagem de Registros</h2>
+            <p>Visualize todos os dados cadastrados no sistema</p>
+          </div>
+
+          <div class="tabs-container">
+            <button class="tab-btn active" data-tab="list-aeronaves">Aeronaves</button>
+            <button class="tab-btn" data-tab="list-pecas">Peças</button>
+            <button class="tab-btn" data-tab="list-funcionarios">Funcionários</button>
+            <button class="tab-btn" data-tab="list-etapas">Etapas</button>
+          </div>
+
+          <!-- Tabelas -->
+          <div id="list-aeronaves" class="tab-content active">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Modelo</th>
+                    <th>Tipo</th>
+                    <th>Capacidade</th>
+                    <th>Alcance (km)</th>
+                  </tr>
+                </thead>
+                <tbody id="table-aeronaves"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="list-pecas" class="tab-content">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Fornecedor</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="table-pecas"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="list-funcionarios" class="tab-content">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Cargo</th>
+                  </tr>
+                </thead>
+                <tbody id="table-funcionarios"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="list-etapas" class="tab-content">
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nome</th>
+                    <th>Prazo (dias)</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="table-etapas"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Relatórios Page -->
+        <div id="relatorios" class="page">
+          <div class="page-header">
+            <h2>Relatórios</h2>
+            <p>Gere relatórios detalhados do sistema</p>
+          </div>
+
+          <div class="relatorio-grid">
+            <div class="relatorio-card">
+              <h3>Relatório de Produção</h3>
+              <p>Análise completa das etapas e progresso de produção</p>
+              <button class="btn btn-primary" onclick="generateReport('producao')">Gerar Relatório</button>
+            </div>
+
+            <div class="relatorio-card">
+              <h3>Relatório de Testes</h3>
+              <p>Resultados dos testes elétricos, hidráulicos e aerodinâmicos</p>
+              <button class="btn btn-primary" onclick="generateReport('testes')">Gerar Relatório</button>
+            </div>
+
+            <div class="relatorio-card">
+              <h3>Relatório de Qualidade</h3>
+              <p>Controle de qualidade e conformidade dos processos</p>
+              <button class="btn btn-primary" onclick="generateReport('qualidade')">Gerar Relatório</button>
+            </div>
+
+            <div class="relatorio-card">
+              <h3>Relatório de Recursos</h3>
+              <p>Análise de funcionários e alocação de pessoal</p>
+              <button class="btn btn-primary" onclick="generateReport('recursos')">Gerar Relatório</button>
+            </div>
+          </div>
+
+          <div class="relatorio-container">
+            <h3>Relatórios Gerados</h3>
+            <div id="relatorio-list" class="relatorio-list">
+              <p class="empty-state">Nenhum relatório gerado ainda</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Métricas Page -->
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>&copy; 2025 Aerocode - Sistema de Gestão da Produção Aeronáutica</p>
+      </footer>
     </div>
-    <div id="log"></div>
+
     <script src="/js/app.js"></script>
   </body>
 </html>

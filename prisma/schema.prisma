@@ -7,9 +7,108 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Aircraft {
-  id          Int      @id @default(autoincrement())
-  name        String
-  manufacturer String
-  createdAt   DateTime @default(now())
+// ====== USUÁRIOS ======
+model User {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senha     String
+  cargo     String   // "administrador" | "gerente" | "operador"
+  ativo     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ====== AERONAVES ======
+model Aeronave {
+  id        Int      @id @default(autoincrement())
+  codigo    String   @unique
+  modelo    String
+  tipo      String   // "comercial" | "militar"
+  capacidade Int
+  alcance   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("aeronaves")
+}
+
+// ====== PEÇAS ======
+model Peca {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  tipo      String   // "nacional" | "importada"
+  fornecedor String
+  status    String   // "producao" | "transporte" | "pronta"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("pecas")
+}
+
+// ====== FUNCIONÁRIOS ======
+model Funcionario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  telefone  String
+  cargo     String   // "administrador" | "engenheiro" | "operador"
+  endereco  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("funcionarios")
+}
+
+// ====== ETAPAS DE PRODUÇÃO ======
+model Etapa {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  prazo     Int      // em dias
+  status    String   // "planejamento" | "em_andamento" | "concluida" | "atrasada"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("etapas")
+}
+
+// ====== TESTES ======
+model Teste {
+  id        Int      @id @default(autoincrement())
+  tipo      String   // "eletrico" | "hidraulico" | "aerodinamico"
+  descricao String?
+  resultado String   // "aprovado" | "reprovado" | "pendente"
+  responsavel String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("testes")
+}
+
+// ====== RELATÓRIOS ======
+model Relatorio {
+  id        Int      @id @default(autoincrement())
+  titulo    String
+  tipo      String   // "producao" | "testes" | "qualidade" | "recursos"
+  conteudo  String   @db.LongText
+  geradoPor String
+  createdAt DateTime @default(now())
+
+  @@map("relatorios")
+}
+
+// ====== MÉTRICAS ======
+model Metrica {
+  id            Int      @id @default(autoincrement())
+  endpoint      String
+  latencia      Float    // em ms
+  tempoResposta Float    // em ms
+  tempoProcessamento Float // em ms
+  usuariosConcorrentes Int
+  statusRequisicao String // "sucesso" | "erro"
+  createdAt     DateTime @default(now())
+
+  @@map("metricas")
 }
