@@ -1,12 +1,5 @@
-// ============================================
-// AEROCODE - SISTEMA DE GESTÃO AERONÁUTICA
-// Frontend JavaScript - v3.0
-// ============================================
-
-// Dados do usuário logado
 let currentUser = null;
 
-// Data Store (localStorage)
 const store = {
   aeronaves: [],
   pecas: [],
@@ -21,7 +14,6 @@ const store = {
   }
 };
 
-// Load data from localStorage on startup
 function loadStore() {
   const saved = localStorage.getItem('aerocodeStore');
   if (saved) {
@@ -29,14 +21,9 @@ function loadStore() {
   }
 }
 
-// Save data to localStorage
 function saveStore() {
   localStorage.setItem('aerocodeStore', JSON.stringify(store));
 }
-
-// ============================================
-// API CALLS
-// ============================================
 
 async function measureFetch(url, opts = {}) {
   const t0 = performance.now();
@@ -115,45 +102,27 @@ async function createAircraft(data) {
   return result;
 }
 
-// ============================================
-// UI NAVIGATION
-// ============================================
-
 function navigateTo(pageId) {
-  // Hide all pages
   document.querySelectorAll('.page').forEach(page => {
     page.classList.remove('active');
   });
-
-  // Show target page
   const targetPage = document.getElementById(pageId);
   if (targetPage) {
     targetPage.classList.add('active');
   }
-
-  // Update navbar buttons
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.remove('active');
     if (btn.dataset.page === pageId) {
       btn.classList.add('active');
     }
   });
-
-  // Scroll to top
   window.scrollTo(0, 0);
 }
-
-// Setup navbar buttons
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     navigateTo(btn.dataset.page);
   });
 });
-
-// ============================================
-// TAB MANAGEMENT
-// ============================================
-
 function setupTabs() {
   document.querySelectorAll('.tabs-container').forEach(container => {
     const buttons = container.querySelectorAll('.tab-btn');
@@ -161,13 +130,11 @@ function setupTabs() {
       btn.addEventListener('click', () => {
         const tabId = btn.dataset.tab;
         
-        // Deactivate all tabs
         buttons.forEach(b => b.classList.remove('active'));
         container.parentElement.querySelectorAll('.tab-content').forEach(content => {
           content.classList.remove('active');
         });
 
-        // Activate selected tab
         btn.classList.add('active');
         const content = document.getElementById(tabId);
         if (content) {
@@ -178,12 +145,7 @@ function setupTabs() {
   });
 }
 
-// ============================================
-// FORM HANDLERS
-// ============================================
-
 function setupForms() {
-  // Aeronave Form
   const formAero = document.getElementById('form-aeronave');
   if (formAero) {
     formAero.addEventListener('submit', async (e) => {
@@ -212,7 +174,6 @@ function setupForms() {
     });
   }
 
-  // Peça Form
   const formPeca = document.getElementById('form-peca');
   if (formPeca) {
     formPeca.addEventListener('submit', async (e) => {
@@ -245,7 +206,6 @@ function setupForms() {
     });
   }
 
-  // Funcionário Form
   const formFunc = document.getElementById('form-func');
   if (formFunc) {
     formFunc.addEventListener('submit', async (e) => {
@@ -279,7 +239,6 @@ function setupForms() {
     });
   }
 
-  // Etapa Form
   const formEtapa = document.getElementById('form-etapa');
   if (formEtapa) {
     formEtapa.addEventListener('submit', async (e) => {
@@ -321,18 +280,11 @@ function showMessage(elementId, message, type = 'success') {
   }
 }
 
-// ============================================
-// LISTAGEM
-// ============================================
-
 async function loadListagemData() {
-  // Buscar dados do banco de dados
   await fetchAircrafts();
   await fetchParts();
   await fetchEmployees();
   await fetchStages();
-
-  // Renderizar Aeronaves
   const tableAero = document.getElementById('table-aeronaves');
   if (tableAero) {
     tableAero.innerHTML = store.aeronaves.length === 0 
@@ -347,8 +299,6 @@ async function loadListagemData() {
         </tr>
       `).join('');
   }
-
-  // Renderizar Peças
   const tablePeca = document.getElementById('table-pecas');
   if (tablePeca) {
     tablePeca.innerHTML = store.pecas.length === 0
@@ -362,8 +312,6 @@ async function loadListagemData() {
         </tr>
       `).join('');
   }
-
-  // Renderizar Funcionários
   const tableFunc = document.getElementById('table-funcionarios');
   if (tableFunc) {
     tableFunc.innerHTML = store.funcionarios.length === 0
@@ -377,8 +325,6 @@ async function loadListagemData() {
         </tr>
       `).join('');
   }
-
-  // Renderizar Etapas
   const tableEtapa = document.getElementById('table-etapas');
   if (tableEtapa) {
     tableEtapa.innerHTML = store.etapas.length === 0
@@ -393,10 +339,6 @@ async function loadListagemData() {
   }
 }
 
-// ============================================
-// DASHBOARD
-// ============================================
-
 function updateDashboard() {
   document.getElementById('count-aircraft').textContent = store.aeronaves.length;
   document.getElementById('count-parts').textContent = store.pecas.length;
@@ -410,7 +352,6 @@ if (btnRefreshDash) {
     btnRefreshDash.classList.add('loading');
     btnRefreshDash.disabled = true;
     
-    // Simular atualização
     await new Promise(resolve => setTimeout(resolve, 800));
     
     updateDashboard();
@@ -421,11 +362,6 @@ if (btnRefreshDash) {
     showMessage('dashboard-msg', 'Dados atualizados!', 'success');
   });
 }
-
-// ============================================
-// RELATÓRIOS
-// ============================================
-
 function generateReport(type) {
   const timestamp = new Date().toLocaleString('pt-BR');
   const report = {
@@ -520,38 +456,23 @@ Gerado em: ${new Date().toLocaleString('pt-BR')}
   document.body.removeChild(element);
 }
 
-// ============================================
-// MÉTRICAS
-// ============================================
-
-// Função removida - updateMetrics não mais necessária
 function updateMetrics(clientMs, serverMs) {
-  // Métrica já não é mais rastreada
+  
 }
 
-// Função removida - testLoad não mais necessário
-
-// ============================================
-// INITIALIZATION
-// ============================================
-
 document.addEventListener('DOMContentLoaded', async () => {
-  // Verificar se há usuários no sistema
   const checkResult = await fetch('/api/auth/check');
   const { hasUsers } = await checkResult.json();
 
   if (!hasUsers) {
-    // Se não há usuários, mostrar página de registro
     document.getElementById('register-first-page').classList.remove('hidden');
     document.getElementById('login-page').classList.add('hidden');
     setupRegisterFirstForm();
   } else {
-    // Se há usuários, mostrar página de login
     document.getElementById('login-page').classList.remove('hidden');
     document.getElementById('register-first-page').classList.add('hidden');
     setupLoginForm();
     
-    // Verificar se já há usuário na sessão
     const storedUser = sessionStorage.getItem('currentUser');
     if (storedUser) {
       currentUser = JSON.parse(storedUser);
@@ -560,10 +481,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 });
-
-// ============================================
-// AUTENTICAÇÃO
-// ============================================
 
 function setupLoginForm() {
   const formLogin = document.getElementById('form-login');
@@ -654,7 +571,6 @@ function showMainApp() {
   updateDashboard();
   loadListagemData();
   
-  // Mostrar informações do usuário
   const userBtn = document.getElementById('btn-user-info');
   if (userBtn && currentUser) {
     userBtn.textContent = `Olá, ${currentUser.nome}`;

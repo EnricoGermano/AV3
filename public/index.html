@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroCode - Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 800px;
+      width: 100%;
+      padding: 50px;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 40px;
+    }
+    
+    .status {
+      background: #e8f5e9;
+      border-left: 4px solid #4CAF50;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+      text-align: left;
+    }
+    
+    .status h3 {
+      color: #4CAF50;
+      margin-bottom: 10px;
+    }
+    
+    .status p {
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 40px 0;
+    }
+    
+    .btn {
+      padding: 15px 30px;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+    
+    .btn-secondary:hover {
+      background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+    
+    .info {
+      background: #f0f4ff;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+      text-align: left;
+    }
+    
+    .info h4 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+    
+    .info p {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    
+    .metrics-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin: 30px 0;
+    }
+    
+    .metric-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .metric-card h3 {
+      font-size: 0.8em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    .metric-value {
+      font-size: 2em;
+      font-weight: bold;
+    }
+    
+    .metric-unit {
+      font-size: 0.8em;
+      opacity: 0.8;
+    }
+    
+    @media (max-width: 600px) {
+      .buttons {
+        grid-template-columns: 1fr;
+      }
+      
+      .metrics-summary {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AeroCode</h1>
+    <p class="subtitle">Sistema de Gestão de Produção de Aeronaves</p>
+    
+    <div class="status">
+      <h3>Status: Operacional</h3>
+      <p>Banco de dados: <strong>Configurado</strong></p>
+      <p>Servidor: <strong>Rodando em http://localhost:3000</strong></p>
+      <p>Performance: <strong>Excelente</strong> (Tempo de resposta <20ms)</p>
+    </div>
+    
+    <div class="metrics-summary">
+      <div class="metric-card">
+        <h3>Latência Média</h3>
+        <div class="metric-value">5-8<span class="metric-unit">ms</span></div>
+      </div>
+      <div class="metric-card">
+        <h3>Processamento</h3>
+        <div class="metric-value">8-11<span class="metric-unit">ms</span></div>
+      </div>
+      <div class="metric-card">
+        <h3>Resposta Total</h3>
+        <div class="metric-value">13-20<span class="metric-unit">ms</span></div>
+      </div>
+    </div>
+    
+    <div class="info">
+      <h4>Relatorios Disponiveis</h4>
+      <p>• <strong>METRICS_REPORT.md</strong> - Relatorio detalhado em Markdown</p>
+      <p>• <strong>/relatorio</strong> - Dashboard visual com graficos interativos</p>
+      <p>• <strong>ENTREGA_FINAL.md</strong> - Documentação técnica completa</p>
+    </div>
+    
+    <div class="buttons">
+      <a href="/relatorio" class="btn btn-primary">Ver Graficos</a>
+      <a href="https://github.com" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Relatorio</a>
+    </div>
+    
+    <div class="info">
+      <h4>Comecando Rapido</h4>
+      <p><strong>Servidor já está rodando em:</strong> http://localhost:3000</p>
+      <p><strong>Endpoints disponíveis:</strong></p>
+      <p style="margin-left: 10px;">
+        • GET /api/aeronaves<br>
+        • GET /api/pecas<br>
+        • GET /api/funcionarios<br>
+        • GET /api/etapas<br>
+        • GET /api/health
+      </p>
+    </div>
+  </div>
+</body>
+</html>

@@ -4,14 +4,13 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Iniciando seed do banco de dados...');
 
-  // Limpar dados existentes (ordem importa!)
-  await prisma.metric.deleteMany({});
-  await prisma.report.deleteMany({});
-  await prisma.test.deleteMany({});
-  await prisma.stage.deleteMany({});
-  await prisma.employee.deleteMany({});
-  await prisma.part.deleteMany({});
-  await prisma.aircraft.deleteMany({});
+  await prisma.metrica.deleteMany({});
+  await prisma.relatorio.deleteMany({});
+  await prisma.teste.deleteMany({});
+  await prisma.etapa.deleteMany({});
+  await prisma.funcionario.deleteMany({});
+  await prisma.peca.deleteMany({});
+  await prisma.aeronave.deleteMany({});
   await prisma.user.deleteMany({});
 
   // Usuário padrão comentado - será criado pelo sistema na primeira vez
@@ -46,7 +45,7 @@ async function main() {
   console.log(`${parts.count} peças criadas`);
 
   // Criar Funcionários
-  const employees = await prisma.employee.createMany({
+  const employees = await prisma.funcionario.createMany({
     data: [
       { nome: 'João Silva', email: 'joao.silva@aerocode.com', telefone: '11987654321', cargo: 'administrador', endereco: 'São Paulo, SP' },
       { nome: 'Maria Santos', email: 'maria.santos@aerocode.com', telefone: '11912345678', cargo: 'engenheiro', endereco: 'São José dos Campos, SP' },
@@ -56,7 +55,7 @@ async function main() {
   console.log(`${employees.count} funcionários criados`);
 
   // Criar Etapas
-  const stages = await prisma.stage.createMany({
+  const stages = await prisma.etapa.createMany({
     data: [
       { nome: 'Montagem de Fuselagem', prazo: 30, status: 'em_andamento' },
       { nome: 'Instalação de Sistemas', prazo: 20, status: 'concluida' },
@@ -66,7 +65,7 @@ async function main() {
   console.log(`${stages.count} etapas criadas`);
 
   // Criar Testes
-  const tests = await prisma.test.createMany({
+  const tests = await prisma.teste.createMany({
     data: [
       { tipo: 'eletrico', descricao: 'Teste do sistema elétrico', resultado: 'aprovado', responsavel: 'Maria Santos' },
       { tipo: 'hidraulico', descricao: 'Teste do sistema hidráulico', resultado: 'aprovado', responsavel: 'Pedro Oliveira' },
@@ -76,7 +75,7 @@ async function main() {
   console.log(`${tests.count} testes criados`);
 
   // Criar Relatórios
-  const reports = await prisma.report.createMany({
+  const reports = await prisma.relatorio.createMany({
     data: [
       {
         titulo: 'Relatório de Produção - Semana 1',
@@ -93,16 +92,6 @@ async function main() {
     ]
   });
   console.log(`${reports.count} relatórios criados`);
-
-  // Criar Métricas de Exemplo
-  const metrics = await prisma.metric.createMany({
-    data: [
-      { endpoint: '/api/aircraft', latencia: 5.2, tempoResposta: 12.3, tempoProcessamento: 8.1, usuariosConcorrentes: 1, statusRequisicao: 'sucesso' },
-      { endpoint: '/api/parts', latencia: 4.8, tempoResposta: 14.5, tempoProcessamento: 9.7, usuariosConcorrentes: 5, statusRequisicao: 'sucesso' },
-      { endpoint: '/api/employees', latencia: 6.1, tempoResposta: 16.2, tempoProcessamento: 10.1, usuariosConcorrentes: 10, statusRequisicao: 'sucesso' }
-    ]
-  });
-  console.log(`${metrics.count} métricas criadas`);
 
   console.log('Seed concluído com sucesso!');
 }

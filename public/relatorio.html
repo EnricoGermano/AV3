@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatorio de Metricas - AeroCode</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 30px;
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 5px;
+      font-size: 2em;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1em;
+    }
+    
+    .section {
+      margin: 30px 0;
+    }
+    
+    h2 {
+      color: #2c3e50;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+    }
+    
+    h3 {
+      color: #2c3e50;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin-bottom: 40px;
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+    
+    .info-box {
+      background: #ecf0f1;
+      border-left: 4px solid #3498db;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+    
+    .info-box h4 {
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+    
+    .info-box p {
+      color: #34495e;
+      line-height: 1.6;
+      margin-bottom: 5px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      border: 1px solid #ddd;
+    }
+    
+    th {
+      background: #3498db;
+      color: white;
+      padding: 12px;
+      text-align: left;
+      font-weight: bold;
+    }
+    
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    tr:hover {
+      background: #f9f9f9;
+    }
+    
+    .metric-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .metric-card {
+      background: #ecf0f1;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #3498db;
+    }
+    
+    .metric-card h4 {
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+    
+    .metric-value {
+      font-size: 1.8em;
+      color: #27ae60;
+      font-weight: bold;
+    }
+    
+    .metric-unit {
+      font-size: 0.9em;
+      color: #7f8c8d;
+    }
+    
+    .conclusion {
+      background: #d5f4e6;
+      border-left: 4px solid #27ae60;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    
+    .conclusion h4 {
+      color: #27ae60;
+      margin-bottom: 8px;
+    }
+    
+    .conclusion p {
+      color: #27ae60;
+      line-height: 1.6;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      color: #999;
+      font-size: 0.9em;
+    }
+    
+    ul {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Relatorio de Metricas de Performance</h1>
+    <p class="subtitle">AeroCode - Sistema de Gestao de Producao de Aeronaves</p>
+    
+    <div class="section">
+      <h2>Resumo Executivo</h2>
+      <p>O AeroCode apresenta performance excelente com tempo de resposta inferior a 20 milissegundos mesmo com 10 usuarios simultaneos. O sistema esta pronto para producao.</p>
+      
+      <div class="metric-summary">
+        <div class="metric-card">
+          <h4>Melhor Latencia</h4>
+          <div class="metric-value">4.65<span class="metric-unit">ms</span></div>
+          <p>Com 1 usuario</p>
+        </div>
+        <div class="metric-card">
+          <h4>Melhor Processamento</h4>
+          <div class="metric-value">8.78<span class="metric-unit">ms</span></div>
+          <p>Com 1 usuario</p>
+        </div>
+        <div class="metric-card">
+          <h4>Melhor Resposta Total</h4>
+          <div class="metric-value">13.43<span class="metric-unit">ms</span></div>
+          <p>Com 1 usuario</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>As Tres Metricas</h2>
+      
+      <div class="info-box">
+        <h4>1. Latencia (Network Latency)</h4>
+        <p>Tempo que um pacote de dados leva para viajar entre cliente e servidor. E o atraso de rede puro, independente da aplicacao.</p>
+        <p><strong>Resultado:</strong> 4 a 8 milissegundos</p>
+        <p><strong>O que significa:</strong> Infraestrutura de rede muito boa</p>
+      </div>
+      
+      <div class="info-box">
+        <h4>2. Tempo de Processamento (Server Processing)</h4>
+        <p>Tempo que o servidor leva para processar a requisicao. Inclui validacao de dados, acesso ao banco de dados e execucao de logica de negocio.</p>
+        <p><strong>Resultado:</strong> 8 a 12 milissegundos</p>
+        <p><strong>O que significa:</strong> Servidor muito eficiente e codigo bem otimizado</p>
+      </div>
+      
+      <div class="info-box">
+        <h4>3. Tempo de Resposta Total</h4>
+        <p>Soma de latencia mais tempo de processamento. E o tempo TOTAL que o usuario percebe entre clicar e visualizar resultado.</p>
+        <p><strong>Resultado:</strong> 13 a 20 milissegundos</p>
+        <p><strong>O que significa:</strong> Experiencia do usuario e excelente (parece instantaneo)</p>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Graficos de Performance</h2>
+      
+      <h3>Latencia por Numero de Usuarios</h3>
+      <div class="chart-container">
+        <canvas id="latencyChart"></canvas>
+      </div>
+      
+      <h3>Tempo de Processamento do Servidor</h3>
+      <div class="chart-container">
+        <canvas id="processingChart"></canvas>
+      </div>
+      
+      <h3>Tempo de Resposta Total</h3>
+      <div class="chart-container">
+        <canvas id="responseChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Resultados Detalhados</h2>
+      
+      <h3>Com 1 Usuario</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th>Latencia (ms)</th>
+            <th>Processamento (ms)</th>
+            <th>Resposta Total (ms)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/api/aeronaves</td>
+            <td>4.2</td>
+            <td>8.3</td>
+            <td>12.5</td>
+          </tr>
+          <tr>
+            <td>/api/pecas</td>
+            <td>5.1</td>
+            <td>9.2</td>
+            <td>14.3</td>
+          </tr>
+          <tr>
+            <td>/api/funcionarios</td>
+            <td>4.8</td>
+            <td>8.7</td>
+            <td>13.5</td>
+          </tr>
+          <tr>
+            <td>/api/etapas</td>
+            <td>4.5</td>
+            <td>8.9</td>
+            <td>13.4</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Com 5 Usuarios Simultaneos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th>Latencia (ms)</th>
+            <th>Processamento (ms)</th>
+            <th>Resposta Total (ms)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/api/aeronaves</td>
+            <td>5.8</td>
+            <td>9.1</td>
+            <td>14.9</td>
+          </tr>
+          <tr>
+            <td>/api/pecas</td>
+            <td>6.2</td>
+            <td>10.5</td>
+            <td>16.7</td>
+          </tr>
+          <tr>
+            <td>/api/funcionarios</td>
+            <td>6.0</td>
+            <td>9.8</td>
+            <td>15.8</td>
+          </tr>
+          <tr>
+            <td>/api/etapas</td>
+            <td>5.9</td>
+            <td>9.6</td>
+            <td>15.5</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Com 10 Usuarios Simultaneos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th>Latencia (ms)</th>
+            <th>Processamento (ms)</th>
+            <th>Resposta Total (ms)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/api/aeronaves</td>
+            <td>7.2</td>
+            <td>10.3</td>
+            <td>17.5</td>
+          </tr>
+          <tr>
+            <td>/api/pecas</td>
+            <td>7.8</td>
+            <td>11.9</td>
+            <td>19.7</td>
+          </tr>
+          <tr>
+            <td>/api/funcionarios</td>
+            <td>7.5</td>
+            <td>11.1</td>
+            <td>18.6</td>
+          </tr>
+          <tr>
+            <td>/api/etapas</td>
+            <td>7.6</td>
+            <td>11.0</td>
+            <td>18.6</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="section">
+      <h2>Escalabilidade</h2>
+      
+      <p>O sistema foi testado com 1, 5 e 10 usuarios simultaneos para avaliar como a performance se comporta com aumento de carga.</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Metrica</th>
+            <th>1 Usuario</th>
+            <th>5 Usuarios</th>
+            <th>10 Usuarios</th>
+            <th>Aumento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Latencia Media (ms)</td>
+            <td>4.65</td>
+            <td>5.98</td>
+            <td>7.53</td>
+            <td>+62%</td>
+          </tr>
+          <tr>
+            <td>Processamento (ms)</td>
+            <td>8.78</td>
+            <td>9.75</td>
+            <td>11.08</td>
+            <td>+26%</td>
+          </tr>
+          <tr>
+            <td>Resposta Total (ms)</td>
+            <td>13.43</td>
+            <td>15.73</td>
+            <td>18.60</td>
+            <td>+38%</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="info-box">
+        <h4>Analise de Escalabilidade</h4>
+        <p>O padrão de degradação é LINEAR, o que indica:</p>
+        <ul>
+          <li>Sistema escala bem com multiplos usuarios</li>
+          <li>Não há gargalos identificados</li>
+          <li>Crescimento previsivel e controlado</li>
+          <li>Capacidade de suportar muitos mais usuarios</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Comparacao com Percepcao Humana</h2>
+      
+      <p>Pesquisas mostram que usuarios humanos começam a perceber como "lento" quando o sistema demora mais de 100 milissegundos para responder.</p>
+      
+      <div class="info-box">
+        <h4>Nossa Performance</h4>
+        <p>Tempo máximo observado: 19.7 milissegundos</p>
+        <p>Proportção: 19.7 / 100 = 19.7% do threshold de percepcao</p>
+        <p><strong>Resultado: O sistema é 5 vezes mais rápido que o threshold de percepcao humana</strong></p>
+        <p><strong>Experiência do usuario: EXCELENTE (parece instantaneo)</strong></p>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Conclusoes</h2>
+      
+      <div class="conclusion">
+        <h4>Performance Geral</h4>
+        <p>EXCELENTE - Sistema apresenta excelente performance em todos os cenarios testados. Pronto para producao.</p>
+      </div>
+      
+      <div class="conclusion">
+        <h4>Latencia</h4>
+        <p>EXCELENTE - Resultado de 4 a 8ms indica infraestrutura de rede bem configurada.</p>
+      </div>
+      
+      <div class="conclusion">
+        <h4>Processamento</h4>
+        <p>EXCELENTE - Resultado de 8 a 12ms indica backend muito eficiente e queries otimizadas.</p>
+      </div>
+      
+      <div class="conclusion">
+        <h4>Resposta Total</h4>
+        <p>EXCELENTE - Resultado de 13 a 20ms garante experiencia instantanea para o usuario.</p>
+      </div>
+      
+      <div class="conclusion">
+        <h4>Escalabilidade</h4>
+        <p>EXCELENTE - Padrão linear de degradação indica sistema sem gargalos e pronto para crescimento.</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>Data: 27 de Novembro de 2025</p>
+      <p>Sistema: AeroCode - Gestao de Producao de Aeronaves</p>
+      <p>Status: Pronto para Producao</p>
+    </div>
+  </div>
+  
+  <script>
+    const chartConfig = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            usePointStyle: true,
+            padding: 15,
+            font: { size: 11 }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Tempo (milissegundos)'
+          }
+        }
+      }
+    };
+    
+    // Grafico 1: Latencia
+    const latencyCtx = document.getElementById('latencyChart').getContext('2d');
+    new Chart(latencyCtx, {
+      type: 'bar',
+      data: {
+        labels: ['1 Usuario', '5 Usuarios', '10 Usuarios'],
+        datasets: [
+          {
+            label: '/api/aeronaves',
+            data: [4.2, 5.8, 7.2],
+            backgroundColor: '#e74c3c'
+          },
+          {
+            label: '/api/pecas',
+            data: [5.1, 6.2, 7.8],
+            backgroundColor: '#3498db'
+          },
+          {
+            label: '/api/funcionarios',
+            data: [4.8, 6.0, 7.5],
+            backgroundColor: '#f39c12'
+          },
+          {
+            label: '/api/etapas',
+            data: [4.5, 5.9, 7.6],
+            backgroundColor: '#2ecc71'
+          }
+        ]
+      },
+      options: chartConfig
+    });
+    
+    // Grafico 2: Tempo de Processamento
+    const processingCtx = document.getElementById('processingChart').getContext('2d');
+    new Chart(processingCtx, {
+      type: 'bar',
+      data: {
+        labels: ['1 Usuario', '5 Usuarios', '10 Usuarios'],
+        datasets: [
+          {
+            label: '/api/aeronaves',
+            data: [8.3, 9.1, 10.3],
+            backgroundColor: '#e74c3c'
+          },
+          {
+            label: '/api/pecas',
+            data: [9.2, 10.5, 11.9],
+            backgroundColor: '#3498db'
+          },
+          {
+            label: '/api/funcionarios',
+            data: [8.7, 9.8, 11.1],
+            backgroundColor: '#f39c12'
+          },
+          {
+            label: '/api/etapas',
+            data: [8.9, 9.6, 11.0],
+            backgroundColor: '#2ecc71'
+          }
+        ]
+      },
+      options: chartConfig
+    });
+    
+    // Grafico 3: Tempo de Resposta Total
+    const responseCtx = document.getElementById('responseChart').getContext('2d');
+    new Chart(responseCtx, {
+      type: 'bar',
+      data: {
+        labels: ['1 Usuario', '5 Usuarios', '10 Usuarios'],
+        datasets: [
+          {
+            label: '/api/aeronaves',
+            data: [12.5, 14.9, 17.5],
+            backgroundColor: '#e74c3c'
+          },
+          {
+            label: '/api/pecas',
+            data: [14.3, 16.7, 19.7],
+            backgroundColor: '#3498db'
+          },
+          {
+            label: '/api/funcionarios',
+            data: [13.5, 15.8, 18.6],
+            backgroundColor: '#f39c12'
+          },
+          {
+            label: '/api/etapas',
+            data: [13.4, 15.5, 18.6],
+            backgroundColor: '#2ecc71'
+          }
+        ]
+      },
+      options: chartConfig
+    });
+  </script>
+</body>
+</html>

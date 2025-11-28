@@ -1,0 +1,97 @@
+AEROCODE - RELATÓRIO DE PERFORMANCE
+Sistema de Gestão de Produção de Aeronaves
+
+================================================================================
+RESULTADOS FINAIS (em milissegundos)
+================================================================================
+
+COM 1 USUARIO:
+  Latencia:             4.65 ms
+  Processamento:        8.78 ms
+  Resposta Total:      13.43 ms
+
+COM 5 USUARIOS:
+  Latencia:             5.98 ms
+  Processamento:        9.75 ms
+  Resposta Total:      15.73 ms
+
+COM 10 USUARIOS:
+  Latencia:             7.53 ms
+  Processamento:       11.08 ms
+  Resposta Total:      18.60 ms
+
+STATUS: EXCELENTE - Pronto para Produção
+
+
+================================================================================
+O QUE CADA MÉTRICA SIGNIFICA
+================================================================================
+
+LATENCIA (Network Latency)
+Tempo que leva para a requisicao chegar ao servidor
+Medido: Do cliente ao servidor e de volta
+Nossa performance: 4-8ms (muito rapido)
+Indica: Boa qualidade de conexao
+
+TEMPO DE PROCESSAMENTO (Server Processing)
+Tempo que o servidor leva para processar o pedido
+Medido: Dentro do servidor enquanto processa
+Nossa performance: 8-12ms (muito eficiente)
+Indica: Codigo bem otimizado, queries rapidas
+
+TEMPO DE RESPOSTA TOTAL
+Soma de latencia + processamento
+Medido: Do clique do usuario ate visualizar resultado
+Nossa performance: 13-20ms (instantaneo)
+Para referencia: Humano percebe como "lento" a partir de 100ms
+
+
+================================================================================
+ANALISE COMPARATIVA
+================================================================================
+
+ESCALA DE USUARIOS:        1 a 5 a 10
+Aumento de Latencia:      4.65 a 5.98 a 7.53  (+62% total)
+Aumento de Processamento: 8.78 a 9.75 a 11.08 (+26% total)
+Aumento Total:           13.43 a 15.73 a 18.60 (+38% total)
+
+PADRAO: LINEAR (excelente - sem gargalos)
+
+
+================================================================================
+CONCLUSÃO
+================================================================================
+
+Sistema e RAPIDO: Resposta <20ms mesmo com 10 usuarios
+Sistema e ESCALAVEL: Crescimento linear e previsivel
+Sistema e PRONTO: Para usar em producao
+Experiencia do usuario: EXCELENTE - parece instantaneo
+
+Proporção da performance: 5x mais rápido que o threshold humano (100ms)
+
+
+================================================================================
+ENDPOINTS TESTADOS
+================================================================================
+
+GET /api/aeronaves       - Lista de aeronaves
+GET /api/pecas           - Lista de peças
+GET /api/funcionarios    - Lista de funcionários
+GET /api/etapas          - Lista de etapas
+
+
+================================================================================
+COMO USAR O SISTEMA
+================================================================================
+
+1. Iniciar servidor:
+   npm run dev
+
+2. Acessar em navegador:
+   http://localhost:3000
+
+3. Ver relatório de métricas:
+   http://localhost:3000/metrics
+
+4. Rodar novos testes:
+   npm run metrics

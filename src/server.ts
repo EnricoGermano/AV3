@@ -2,7 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const prisma = new PrismaClient();
 const app = express();
 app.use(cors());
@@ -10,7 +12,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'routes', 'static')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// In-memory processing times (ms)
 const processingTimes: number[] = [];
 const MAX_SAMPLES = 20000;
 
@@ -19,10 +20,9 @@ function recordProcessingTime(ms: number) {
   if (processingTimes.length > MAX_SAMPLES) processingTimes.shift();
 }
 
-// Middleware para medir tempo de processamento do servidor
+
 app.use(async (req, res, next) => {
   const start = process.hrtime.bigint();
-  // Quando response terminar, calcular
   res.on('finish', () => {
     const end = process.hrtime.bigint();
     const diff = Number((end - start) / BigInt(1_000_000)); // ms
@@ -31,9 +31,6 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// ======================================
-// AUTENTICAÇÃO (LOGIN/REGISTER)
-// ======================================
 
 app.post('/api/auth/register', async (req, res) => {
   try {
@@ -109,9 +106,7 @@ app.get('/api/auth/check', async (req, res) => {
   }
 });
 
-// ======================================
-// AIRCRAFT (AERONAVES)
-// ======================================
+
 
 app.get('/api/aircraft', async (req, res) => {
   try {
@@ -175,9 +170,6 @@ app.delete('/api/aircraft/:id', async (req, res) => {
   }
 });
 
-// ======================================
-// PARTS (PEÇAS)
-// ======================================
 
 app.get('/api/parts', async (req, res) => {
   try {
@@ -218,9 +210,7 @@ app.delete('/api/parts/:id', async (req, res) => {
   }
 });
 
-// ======================================
-// EMPLOYEES (FUNCIONÁRIOS)
-// ======================================
+
 
 app.get('/api/employees', async (req, res) => {
   try {
@@ -265,9 +255,7 @@ app.delete('/api/employees/:id', async (req, res) => {
   }
 });
 
-// ======================================
-// STAGES (ETAPAS)
-// ======================================
+
 
 app.get('/api/stages', async (req, res) => {
   try {
@@ -312,9 +300,6 @@ app.delete('/api/stages/:id', async (req, res) => {
   }
 });
 
-// ======================================
-// TESTS (TESTES)
-// ======================================
 
 app.get('/api/tests', async (req, res) => {
   try {
@@ -344,9 +329,7 @@ app.post('/api/tests', async (req, res) => {
   }
 });
 
-// ======================================
-// REPORTS (RELATÓRIOS)
-// ======================================
+
 
 app.get('/api/reports', async (req, res) => {
   try {
@@ -379,9 +362,7 @@ app.post('/api/reports', async (req, res) => {
   }
 });
 
-// ======================================
-// METRICS (MÉTRICAS)
-// ======================================
+
 
 app.get('/api/metrics', async (req, res) => {
   try {
@@ -417,9 +398,11 @@ app.post('/api/metrics', async (req, res) => {
   }
 });
 
-// ======================================
-// HEALTH CHECK
-// ======================================
+app.get('/relatorio', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'relatorio.html'));
+});
+
+
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -429,11 +412,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ======================================
-// SERVER STARTUP
-// ======================================
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 app.listen(port, () => {
-  console.log(`Aerocode v3.0 servidor rodando em http://localhost:${port}`);
+  console.log(`Aerocode servidor rodando em http://localhost:${port}`);
+  console.log(`Relatorio de Metricas de Performance rodando em http://localhost:${port}/relatorio`);
 });

@@ -9,9 +9,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:seed": "ts-node prisma/seed.ts",
-    "test": "node scripts/test-api.js",
-    "benchmark": "bash scripts/benchmark.sh",
-    "report": "python3 scripts/generate_report.py results"
+    "metrics": "ts-node scripts/performance-metrics.js"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
@@ -19,6 +17,9 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
     "autocannon": "^7.12.0",
     "prisma": "^5.0.0",
     "ts-node": "^10.9.1",

@@ -99,16 +99,3 @@ model Relatorio {
   @@map("relatorios")
 }
 
-// ====== MÉTRICAS ======
-model Metrica {
-  id            Int      @id @default(autoincrement())
-  endpoint      String
-  latencia      Float    // em ms
-  tempoResposta Float    // em ms
-  tempoProcessamento Float // em ms
-  usuariosConcorrentes Int
-  statusRequisicao String // "sucesso" | "erro"
-  createdAt     DateTime @default(now())
-
-  @@map("metricas")
-}
