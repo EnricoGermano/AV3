@@ -1,6 +1,3 @@
-DROP TABLE `aircraft`;
-
- 
 CREATE TABLE `users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nome` VARCHAR(191) NOT NULL,

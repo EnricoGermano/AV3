@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Iniciando seed do banco de dados...');
 
-  await prisma.metrica.deleteMany({});
   await prisma.relatorio.deleteMany({});
   await prisma.teste.deleteMany({});
   await prisma.etapa.deleteMany({});
