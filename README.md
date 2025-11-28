@@ -23,7 +23,7 @@ npm install
 Crie um arquivo `.env` na raiz do projeto:
 
 ```env
-DATABASE_URL="mysql://usuario:senha@localhost:3306/aerocode_db"
+DATABASE_URL="mysql://usuario:senha@localhost:3306/av3"
 PORT=3000
 ```
 
