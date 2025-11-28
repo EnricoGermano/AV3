@@ -11,6 +11,9 @@
     "prisma:seed": "ts-node prisma/seed.ts",
     "metrics": "ts-node scripts/performance-metrics.js"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^5.0.0",
     "cors": "^2.8.5",
@@ -22,8 +25,8 @@
     "@types/node": "^24.10.1",
     "autocannon": "^7.12.0",
     "prisma": "^5.0.0",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.9.3"
   }
 }
