@@ -30,8 +30,8 @@ PORT=3000
 #### 4. Configure o banco de dados
 
 ```bash
-# Crie o banco de dados
-mysql -u root -p -e "CREATE DATABASE av3;"
+# Crie a tabela no banco de dados
+"CREATE DATABASE av3;"
 
 # Execute as migrations
 npx prisma migrate dev --name init
